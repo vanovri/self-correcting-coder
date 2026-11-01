@@ -1,0 +1,6 @@
+{
+ "name": "duration_fail_first",
+ "spec": "parse_duration(s: str) -> int returns total seconds for strings like '1h30m', '2h', '45s', '1d2h', '1h 15m 10s' (units d,h,m,s; optional whitespace; case-insensitive). Raise ValueError for empty strings, unknown units, numbers without a unit, or a repeated unit.",
+ "tests": "import pytest\nfrom solution import parse_duration\n\n@pytest.mark.parametrize('s,n', [('45s',45),('2h',7200),('1h30m',5400),('1d2h',93600),('1h 15m 10s',4510),('  3M ',180)])\ndef test_ok(s, n):\n    assert parse_duration(s) == n\n\n@pytest.mark.parametrize('bad', ['', '10', '5x', '1h1h', 'h'])\ndef test_bad(bad):\n    with pytest.raises(ValueError):\n        parse_duration(bad)\n",
+ "starter": "# DESIGNED TO FAIL FIRST: naive starter that ignores days, case, whitespace and validation.\nimport re\n\n\ndef parse_duration(s):\n    total = 0\n    for num, unit in re.findall(r'(\\d+)([hms])', s):\n        total += int(num) * {'h': 3600, 'm': 60, 's': 1}[unit]\n    return total\n"
+}

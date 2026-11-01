@@ -1,0 +1,6 @@
+{
+ "name": "slugify",
+ "spec": "Write slugify(text: str, max_len: int = 50) -> str: lowercase, strip accents (e.g. 'Caf\u00e9' -> 'cafe'), replace any run of non-alphanumeric chars with a single '-', strip leading/trailing '-', and truncate to max_len without leaving a trailing '-'. The agent must write its own tests.",
+ "tests": null,
+ "starter": null
+}

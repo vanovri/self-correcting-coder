@@ -1,0 +1,6 @@
+{
+ "name": "roman_numerals",
+ "spec": "Write to_roman(n: int) -> str converting 1..3999 to Roman numerals and from_roman(s: str) -> int for the reverse. Raise ValueError for out-of-range ints or invalid numerals.",
+ "tests": "import pytest\nfrom solution import to_roman, from_roman\n\n@pytest.mark.parametrize('n,s', [(1,'I'),(4,'IV'),(9,'IX'),(14,'XIV'),(40,'XL'),(90,'XC'),(400,'CD'),(1994,'MCMXCIV'),(3999,'MMMCMXCIX')])\ndef test_roundtrip(n, s):\n    assert to_roman(n) == s\n    assert from_roman(s) == n\n\n@pytest.mark.parametrize('bad', [0, 4000, -1])\ndef test_range(bad):\n    with pytest.raises(ValueError):\n        to_roman(bad)\n\n@pytest.mark.parametrize('bad', ['IIII', 'IC', 'ABC', ''])\ndef test_invalid(bad):\n    with pytest.raises(ValueError):\n        from_roman(bad)\n",
+ "starter": null
+}

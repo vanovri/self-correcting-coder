@@ -1,0 +1,3 @@
+openai>=1.50
+streamlit>=1.40
+pytest>=8.0
