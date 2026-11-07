@@ -50,6 +50,10 @@ def run_pytest(files: dict[str, str], timeout: int = 60, python: str = sys.execu
         except subprocess.TimeoutExpired as e:
             out, rc = f"TIMEOUT after {timeout}s\n{(e.stdout or b'')[-4000:]!r}", -9
     lines = [l for l in out.strip().splitlines() if l.strip()]
-    return {"passed": rc == 0, "returncode": rc, "output": out,
-            "summary": lines[-1] if lines else "", "sandbox": "netns+tmpdir" if isolated else "tmpdir",
+    summary = lines[-1] if lines else ""
+    skipped_only = bool(re.search(r"^\d+\s+skipped\b", summary)) or (
+        bool(lines) and all(re.fullmatch(r"s+(?:\s+\[\s*\d+%\s*\])?", ln) for ln in lines)
+    )
+    return {"passed": rc == 0 and bool(lines) and not skipped_only, "returncode": rc, "output": out,
+            "summary": summary, "sandbox": "netns+tmpdir" if isolated else "tmpdir",
             "failures": re.findall(r"^(?:FAILED|ERROR) (\S+)", out, re.M)}

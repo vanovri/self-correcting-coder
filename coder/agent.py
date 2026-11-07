@@ -84,10 +84,18 @@ class SelfCorrectingCoder:
         files = parse_files(self.llm.complete(prompt))
         if not files:  # one retry with a format reminder
             files = parse_files(self.llm.complete(prompt + "\n\nYour last reply had no file blocks. " + FORMAT_HELP))
-        return {k: v for k, v in files.items() if allowed is None or k not in allowed}
+        return {
+            k: v
+            for k, v in files.items()
+            if allowed is None or (k not in allowed and Path(k).name not in allowed)
+        }
 
     def run(self, task: Task) -> Result:
-        locked = {"test_solution.py"} if task.tests else set()
+        locked = (
+            {"test_solution.py", "conftest.py", "pytest.ini", ".pytest.ini", "pyproject.toml", "setup.cfg", "tox.ini"}
+            if task.tests
+            else set()
+        )
         files: dict[str, str] = {}
         if task.starter:
             files["solution.py"], action = task.starter, "starter code (given)"
